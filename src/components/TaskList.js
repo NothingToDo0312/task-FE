@@ -41,8 +41,9 @@ const TaskList = () => {
   const handleAddTask = async (taskData) => {
     try {
       const newTask = await taskService.addTask(taskData);
-      setTasks(prev => [...prev, newTask]);
       setShowForm(false);
+      // Reload the page to ensure all data is fresh from the server
+      window.location.reload();
     } catch (err) {
       setError('Failed to add task');
       console.error('Error adding task:', err);
@@ -53,10 +54,9 @@ const TaskList = () => {
     try {
       const updatedTask = await taskService.updateTask(id, taskData);
       if (updatedTask) {
-        setTasks(prev => prev.map(task => 
-          task.id === id ? updatedTask : task
-        ));
         setEditingTask(null);
+        // Reload the page to ensure all data is fresh from the server
+        window.location.reload();
       } else {
         setError('Task not found');
       }
@@ -71,7 +71,8 @@ const TaskList = () => {
       try {
         const deletedTask = await taskService.deleteTask(id);
         if (deletedTask) {
-          setTasks(prev => prev.filter(task => task.id !== id));
+          // Reload the page to ensure all data is fresh from the server
+          window.location.reload();
         } else {
           setError('Task not found');
         }
